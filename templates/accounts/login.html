@@ -1,46 +1,94 @@
 <!DOCTYPE html>
-<!-- saved from url=(0038)http://v3.bootcss.com/examples/signin/ -->
-<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8" />
+	<title>Admin | 欢迎登陆</title>
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="" name="description" />
+	<meta content="" name="author" />
 
-    <title>Signin Template for Bootstrap</title>
+	<!-- ================== BEGIN BASE CSS STYLE ================== -->
+	<link href="/static/assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />
+	<link href="/static/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="/static/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+	<link href="/static/assets/css/animate.min.css" rel="stylesheet" />
+	<link href="/static/assets/css/style.min.css" rel="stylesheet" />
+	<link href="/static/assets/css/style-responsive.min.css" rel="stylesheet" />
+	<link href="/static/assets/css/theme/default.css" rel="stylesheet" id="theme" />
+	<!-- ================== END BASE CSS STYLE ================== -->
+</head>
+<body>
+	<!-- begin #page-loader -->
+	<div id="page-loader" class="fade in"><span class="spinner"></span></div>
+	<!-- end #page-loader -->
 
-    <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="/static/css/sign.css" rel="stylesheet">
-
-  </head>
-
-  <body>
-
-    <div class="container">
-
-      <form class="form-signin" method="post" action="{% url 'login' %}"> {% csrf_token %}
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required="" autofocus="">
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required="">
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
+	<div class="login-cover">
+	    <div class="login-cover-image"><img src="/static/assets/img/login-bg/bg-1.jpg" data-id="login-cover-image" alt="" /></div>
+	    <div class="login-cover-bg"></div>
+	</div>
+	<!-- begin #page-container -->
+	<div id="page-container" class="fade">
+	    <!-- begin login -->
+        <div class="login login-v2" data-pageload-addclass="animated flipInX">
+            <!-- begin brand -->
+            <div class="login-header">
+                <div class="brand">
+                    <span class="logo"></span> 账户登录<small></small>
+                </div>
+            </div>
+            <!-- end brand -->
+            <div class="login-content">
+                <form action="{% url 'login' %}" method="POST" class="margin-bottom-0">{% csrf_token %}
+                    <div class="form-group m-b-20">
+                        <input type="email" name='email' class="form-control input-lg" placeholder="Email Address" />
+                    </div>
+                    <div class="form-group m-b-20">
+                        <input type="password" name='password' class="form-control input-lg" placeholder="Password" />
+                    </div>
+                    <div class="login-buttons">
+                        <button type="submit" class="btn btn-success btn-block btn-lg">登陆</button>
+                    </div>
+                    <span style="color: red">{{ login_err }}  </span>
+                    <div class="m-t-20">新用户创建点击<a href="#">这里</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <button class="btn btn-lg btn-success btn-block" type="submit">LOGIN</button>
-        <span style="color: red">{{ login_err }}  </span>
-      </form>
+        <!-- end login -->
 
-    </div> <!-- /container -->
+        <!-- begin theme-panel -->
+        <!-- end theme-panel -->
+	</div>
+	<!-- end page container -->
 
+	<!-- ================== BEGIN BASE JS ================== -->
+	<script src="/static/assets/plugins/jquery/jquery-1.9.1.min.js"></script>
+	<script src="/static/assets/plugins/jquery/jquery-migrate-1.1.0.min.js"></script>
+	<script src="/static/assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+	<script src="/static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+	<!--[if lt IE 9]>
+		<script src="/static/assets/crossbrowserjs/html5shiv.js"></script>
+		<script src="/static/assets/crossbrowserjs/respond.min.js"></script>
+		<script src="/static/assets/crossbrowserjs/excanvas.min.js"></script>
+	<![endif]-->
+	<script src="/static/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="/static/assets/plugins/jquery-cookie/jquery.cookie.js"></script>
+	<!-- ================== END BASE JS ================== -->
 
+	<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+	<script src="/static/assets/js/login-v2.demo.min.js"></script>
+	<script src="/static/assets/js/apps.min.js"></script>
+	<!-- ================== END PAGE LEVEL JS ================== -->
 
+	<script>
+		$(document).ready(function() {
+			App.init();
+			LoginV2.init();
+		});
+	</script>
 
-</body></html>
+</body>
+</html>
