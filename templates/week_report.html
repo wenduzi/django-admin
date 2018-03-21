@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+
+{% block sidebar %}
+<div id="sidebar" class="sidebar">
+    <!-- begin sidebar scrollbar -->
+    <div data-scrollbar="true" data-height="100%">
+        <!-- begin sidebar nav -->
+        <ul class="nav">
+            <li class="has-sub active" >
+                <a href="javascript:">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-laptop"></i>
+                    <span>仪表盘</span>
+                </a>
+                <ul class="sub-menu">
+                    <li class="active"><a href="{% url 'week_report' %}">周报</a></li>
+                    <li><a href="{% url 'month_report' %}">月报</a></li>
+                </ul>
+            </li>
+            <li><a href="{% url 'month_report' %}"><i class="fa fa-area-chart"></i><span>指标监控</span> </a></li>
+            <li><a href="{% url 'month_report' %}"><i class="fa fa-cubes"></i><span>主机管理</span></a></li>
+            <!-- begin sidebar minify button -->
+            <li><a href="javascript:" class="sidebar-minify-btn" data-click="sidebar-minify"><i
+                class="fa fa-angle-double-left"></i></a></li>
+            <!-- end sidebar minify button -->
+        </ul>
+        <!-- end sidebar nav -->
+    </div>
+    <!-- end sidebar scrollbar -->
+</div>
+<div class="sidebar-bg">
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content" class="content">
+    <!-- begin page-header -->
+    <h1 class="page-header">周信息汇总</h1>
+    <!-- end page-header -->
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-green">
+                <div class="stats-icon stats-icon-lg">
+                    <i class="fa fa-globe fa-fw"></i>
+                </div>
+                <div class="stats-title">
+                    用户访问数</div>
+                <div class="stats-number">
+                    7,842,900</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 70.1%;">
+                    </div>
+                </div>
+                <div class="stats-desc">
+                    较上周增加（70%）</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-blue">
+                <div class="stats-icon stats-icon-lg">
+                    <i class="fa fa-tags fa-fw"></i>
+                </div>
+                <div class="stats-title">
+                    运行时间</div>
+                <div class="stats-number">
+                    180,200</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 40.5%;">
+                    </div>
+                </div>
+                <div class="stats-desc">
+                    较上周增加 (40.5%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-purple">
+                <div class="stats-icon stats-icon-lg">
+                    <i class="fa fa-shopping-cart fa-fw"></i>
+                </div>
+                <div class="stats-title">
+                    错误数</div>
+                <div class="stats-number">
+                    38,900</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 76.3%;">
+                    </div>
+                </div>
+                <div class="stats-desc">
+                    较上周增加 (76.3%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+        <!-- begin col-3 -->
+        <div class="col-md-3 col-sm-6">
+            <div class="widget widget-stats bg-black">
+                <div class="stats-icon stats-icon-lg">
+                    <i class="fa fa-comments fa-fw"></i>
+                </div>
+                <div class="stats-title">
+                    点击量</div>
+                <div class="stats-number">
+                    3,988</div>
+                <div class="stats-progress progress">
+                    <div class="progress-bar" style="width: 54.9%;">
+                    </div>
+                </div>
+                <div class="stats-desc">
+                    较上周增加 (54.9%)</div>
+            </div>
+        </div>
+        <!-- end col-3 -->
+    </div>
+    <!-- end row -->
+    <!-- begin row -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-inverse" data-sortable-id="index-0">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        Visitors Analytics <small> Where do our visitors come from </small>
+                    </h4>
+                    <div id="visitors-line-chart" class="morris-inverse" style="height: 260px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-inverse bg-black" data-sortable-id="index-1">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        HTTP状态码
+                    </h4>
+                </div>
+                <div id="visitors-donut-chart" style="height: 225px"></div>
+                <ul class="chart-legend">
+                    <li><i class="fa fa-circle-o fa-fw text-success m-r-5"></i>34.0% <span>New Visitors</span></li>
+                    <li><i class="fa fa-circle-o fa-fw text-primary m-r-5"></i>56.0% <span>Return Visitors</span></li>
+                </ul>
+                </div>
+            </div>
+        </div>
+    <!-- end row -->
+    <!-- begin row -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-inverse"  data-sortable-id="index-3">
+                <div class="panel-heading">
+                    <h4 class="panel-title">各版块访问量</h4>
+                </div>
+                <div class="panel-body">
+                    <div id="bar-chart" class="height-sm"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-inverse" data-sortable-id="index-2">
+                <div class="panel-heading">
+                    <h4 class="panel-title">页面访问次数TOP10</h4>
+                </div>
+
+                    <table class="table table-hover">
+                        <thead class="bg-blue">
+                            <tr>
+                                <th>序号</th>
+                                <th>页面</th>
+                                <th>访问次数</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-grey-lighter">
+                            <tr>
+                                <td>1</td>
+                                <td>Nicky Almera</td>
+                                <td>nicky@hotmail.com</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Edmund Wong</td>
+                                <td>edmund@yahoo.com</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Harvinder Singh</td>
+                                <td>harvinder@gmail.com</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Terry Khoo</td>
+                                <td>terry@gmail.com</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Nicky Allmera</td>
+                                <td>nilcky@hotmail.com</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Edmund Wong</td>
+                                <td>edmund@yahoo.com</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Harvinder Singh</td>
+                                <td>harvinder@gmail.com</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Terry Khoo</td>
+                                <td>terry@gmail.com</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+</div>
+{% endblock %}
+
+{% block js %}
+    <script src="/static/assets/plugins/flot/jquery.flot.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.time.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.resize.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.pie.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.stack.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.crosshair.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.categories.js"></script>
+<script>
+    $(document).ready(function() {
+        App.init();
+    });
+    var handleVisitorsDonutChart=function(){var e="#00acac";var t="#348fe2";Morris.Donut({element:"visitors-donut-chart",data:[{label:"New Visitors",value:900},{label:"Return Visitors",value:1200}],colors:[e,t],labelFamily:"Open Sans",labelColor:"rgba(255,255,255,0.4)",labelTextSize:"12px",backgroundColor:"#242a30"})};
+    handleVisitorsDonutChart();
+    var getMonthName=function(e){var t=[];t[0]="January";t[1]="February";t[2]="March";t[3]="April";t[4]="May";t[5]="Jun";t[6]="July";t[7]="August";t[8]="September";t[9]="October";t[10]="November";t[11]="December";return t[e]};var getDate=function(e){var t=new Date(e);var n=t.getDate();var r=t.getMonth()+1;var i=t.getFullYear();if(n<10){n="0"+n}if(r<10){r="0"+r}t=i+"-"+r+"-"+n;return t};
+    var handleVisitorsLineChart=function(){var e="#0D888B";var t="#00ACAC";var n="#3273B1";var r="#348FE2";var i="rgba(0,0,0,0.6)";var s="rgba(255,255,255,0.4)";Morris.Line({element:"visitors-line-chart",data:[{x:"2014-02-01",y:60,z:30},{x:"2014-03-01",y:70,z:40},{x:"2014-04-01",y:40,z:10},{x:"2014-05-01",y:100,z:70},{x:"2014-06-01",y:40,z:10},{x:"2014-07-01",y:80,z:50},{x:"2014-08-01",y:70,z:40}],xkey:"x",ykeys:["y","z"],xLabelFormat:function(e){e=getMonthName(e.getMonth());return e.toString()},labels:["Page Views","Unique Visitors"],lineColors:[e,n],pointFillColors:[t,r],lineWidth:"2px",pointStrokeColors:[i,i],resize:true,gridTextFamily:"Open Sans",gridTextColor:s,gridTextWeight:"normal",gridTextSize:"11px",gridLineColor:"rgba(0,0,0,0.5)",hideHover:"auto"})};
+    handleVisitorsLineChart();
+    var purple="#727cb6";
+    var handleBarChart=function(){"use strict";if($("#bar-chart").length!==0){var e=[['www',10],['asdf',8],['asdf',4],[4,13],[5,17],[6,9]];$.plot("#bar-chart",[{data:e,color:purple}],{series:{bars:{show:true,barWidth:.4,align:"center",fill:true,fillColor:purple,zero:true}},xaxis:{mode:"categories",tickColor:"#ddd",tickLength:0},grid:{borderWidth:0}})}};
+    handleBarChart();
+</script>
+{% endblock %}

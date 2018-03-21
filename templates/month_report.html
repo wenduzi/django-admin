@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block sidebar %}
+<div id="sidebar" class="sidebar">
+    <!-- begin sidebar scrollbar -->
+    <div data-scrollbar="true" data-height="100%">
+        <!-- begin sidebar nav -->
+        <ul class="nav">
+            <li class="has-sub active">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-laptop"></i>
+                    <span>仪表盘</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{% url 'week_report' %}">周报</a></li>
+                    <li  class="active"><a href="{% url 'month_report' %}">月报</a></li>
+                </ul>
+            </li>
+            <li><a href="monitor.html"><i class="fa fa-area-chart"></i><span>指标监控</span> </a></li>
+            <li><a href="hosts.html"><i class="fa fa-cubes"></i><span>主机管理</span></a></li>
+            <!-- begin sidebar minify button -->
+            <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i
+                class="fa fa-angle-double-left"></i></a></li>
+            <!-- end sidebar minify button -->
+        </ul>
+        <!-- end sidebar nav -->
+    </div>
+    <!-- end sidebar scrollbar -->
+</div>
+<div class="sidebar-bg">
+</div>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
