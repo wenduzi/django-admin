@@ -7,7 +7,6 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-
 from user_auth.custom_auth import UserProfile
 from django.contrib.auth import  forms as auth_form
 
@@ -68,24 +67,24 @@ class UserProfileAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email','is_admin','name','department','tel')
+    list_display = ('email','is_admin','name','department')
     list_filter = ('is_admin','date_joined','department')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('department','tel','mobile','memo')}),
+        ('Personal info', {'fields': ('department', 'mobile', 'memo')}),
         ('API TOKEN info', {'fields': ('token',)}),
-        (u'可管理的主机组', {'fields': ('host_groups',)}),
-        (u'可管理的主机', {'fields': ('bind_hosts',)}),
-        ('Permissions', {'fields': ('is_active','is_admin')}),
+    #    (u'可管理的主机组', {'fields': ('host_groups',)}),
+    #    (u'可管理的主机', {'fields': ('bind_hosts',)}),
+        ('Permissions', {'fields': ('is_active', 'is_admin')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email',  'password1', 'password2','is_active','is_admin')}
+            'fields': ('email',  'password1', 'password2', 'is_active', 'is_admin')}
         ),
     )
-    search_fields = ('email','department')
+    search_fields = ('email', 'department')
     ordering = ('email',)
-    filter_horizontal = ('bind_hosts','host_groups')
+    # filter_horizontal = ('bind_hosts','host_groups')
