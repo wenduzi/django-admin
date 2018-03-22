@@ -1,6 +1,5 @@
 #_*_coding:utf-8_*_
 
-__author__ = 'alex'
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
@@ -9,6 +8,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 from user_auth.custom_auth import UserProfile
 from django.contrib.auth import  forms as auth_form
+import unicodedata
 
 
 class UserCreationForm(forms.ModelForm):
@@ -19,7 +19,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('email','token')
+        fields = ('email', 'token')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -44,13 +44,21 @@ class UserChangeForm(forms.ModelForm):
     password hash display field.
     """
     password = ReadOnlyPasswordHashField(label="Password",
-        help_text=("Raw passwords are not stored, so there is no way to see "
-                    "this user's password, but you can change the password "
-                    "using <a href=\"password/\">this form</a>."))
+        help_text=(
+            "Raw passwords are not stored, so there is no way to see this "
+            "user's password, but you can change the password using "
+            "<a href=\"{}\">this form</a>."))
 
     class Meta:
         model = UserProfile
         fields = ('email', 'password','is_active', 'is_admin')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password'].help_text = self.fields['password'].help_text.format('../password/')
+        f = self.fields.get('user_permissions')
+        if f is not None:
+            f.queryset = f.queryset.select_related('content_type')
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
@@ -73,8 +81,8 @@ class UserProfileAdmin(UserAdmin):
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': ('department', 'mobile', 'memo')}),
         ('API TOKEN info', {'fields': ('token',)}),
-    #    (u'可管理的主机组', {'fields': ('host_groups',)}),
-    #    (u'可管理的主机', {'fields': ('bind_hosts',)}),
+        #(u'可管理的主机组', {'fields': ('host_groups',)}),
+        #(u'可管理的主机', {'fields': ('bind_hosts',)}),
         ('Permissions', {'fields': ('is_active', 'is_admin')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -87,4 +95,4 @@ class UserProfileAdmin(UserAdmin):
     )
     search_fields = ('email', 'department')
     ordering = ('email',)
-    # filter_horizontal = ('bind_hosts','host_groups')
+    filter_horizontal = ()
