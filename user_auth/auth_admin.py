@@ -43,15 +43,14 @@ class UserChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     password hash display field.
     """
-    password = ReadOnlyPasswordHashField(label="Password",
-        help_text=(
+    password = ReadOnlyPasswordHashField(label="Password", help_text=(
             "Raw passwords are not stored, so there is no way to see this "
             "user's password, but you can change the password using "
             "<a href=\"{}\">this form</a>."))
 
     class Meta:
         model = UserProfile
-        fields = ('email', 'password','is_active', 'is_admin')
+        fields = ('email', 'password', 'is_active', 'is_admin')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -75,14 +74,14 @@ class UserProfileAdmin(UserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email','is_admin','name','department')
-    list_filter = ('is_admin','date_joined','department')
+    list_display = ('email', 'is_admin', 'name', 'department')
+    list_filter = ('is_admin', 'date_joined', 'department')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': ('department', 'mobile', 'memo')}),
         ('API TOKEN info', {'fields': ('token',)}),
-        #(u'可管理的主机组', {'fields': ('host_groups',)}),
-        #(u'可管理的主机', {'fields': ('bind_hosts',)}),
+        # (u'可管理的主机组', {'fields': ('host_groups',)}),
+        # (u'可管理的主机', {'fields': ('bind_hosts',)}),
         ('Permissions', {'fields': ('is_active', 'is_admin')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -90,8 +89,7 @@ class UserProfileAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email',  'password1', 'password2', 'is_active', 'is_admin')}
-        ),
+            'fields': ('email',  'password1', 'password2', 'is_active', 'is_admin')}),
     )
     search_fields = ('email', 'department')
     ordering = ('email',)
