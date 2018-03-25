@@ -1,14 +1,12 @@
+# -*- coding:utf-8 -*-
 import warnings
-from django.shortcuts import render, HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import (
-    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm,)
-from django.urls import reverse, reverse_lazy
+from django.contrib.auth.forms import PasswordChangeForm
+from django.urls import reverse
 from django.shortcuts import resolve_url
-from django.contrib.auth import (
-    REDIRECT_FIELD_NAME, get_user_model, login as auth_login,
-    logout as auth_logout, update_session_auth_hash,)
+from django.contrib.auth import update_session_auth_hash
 from django.template.response import TemplateResponse
 # Create your views here.
 
@@ -41,7 +39,7 @@ def user_logout(request):
 @login_required
 def password_change(request,
                     template_name='accounts/password_change_form.html',
-                    post_change_redirect=None,
+                    post_change_redirect='/',
                     password_change_form=PasswordChangeForm,
                     extra_context=None):
     warnings.warn("The password_change() view is superseded by the "
@@ -67,6 +65,7 @@ def password_change(request,
     }
     if extra_context is not None:
         context.update(extra_context)
+    print(context)
 
     return TemplateResponse(request, template_name, context)
 

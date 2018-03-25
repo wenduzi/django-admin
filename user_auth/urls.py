@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 """admin_site URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -16,7 +17,7 @@ Including another URLconf
 
 from django.conf.urls import url
 from . import views
-#from django.contrib.auth.views import password_change, password_change_done
+# from django.contrib.auth.views import password_change, password_change_done
 
 urlpatterns = [
     url(r'^login/$', views.user_login, name='login'),

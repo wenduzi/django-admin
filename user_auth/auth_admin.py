@@ -1,14 +1,14 @@
-#_*_coding:utf-8_*_
+# -*- coding:utf-8 -*-
 
 from django import forms
-from django.contrib import admin
-from django.contrib.auth.models import Group
+# from django.contrib import admin
+# from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
 from user_auth.custom_auth import UserProfile
-from django.contrib.auth import  forms as auth_form
-import unicodedata
+# from django.contrib.auth import  forms as auth_form
+# import unicodedata
 
 
 class UserCreationForm(forms.ModelForm):
