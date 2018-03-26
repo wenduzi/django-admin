@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
+from hosts.models import (ApplicationType, BusinessGroup, BindHostToUser)
 
 
 class UserManager(BaseUserManager):
@@ -54,8 +55,9 @@ class UserProfile(AbstractBaseUser):
     mobile = models.CharField(u'手机', max_length=32, default=None, blank=True, null=True)
     memo = models.TextField(u'备注', blank=True, null=True, default=None)
     date_joined = models.DateTimeField(blank=True, auto_now_add=True)
-    # host_groups = models.ManyToManyField("HostGroup", blank=True)
-    # bind_hosts = models.ManyToManyField("BindHostToUser", blank=True)
+    application_type = models.ManyToManyField("ApplicationType", blank=True)
+    business_group = models.ManyToManyField("BusinessGroup", blank=True)
+    bind_hosts = models.ManyToManyField("BindHostToUser", blank=True)
 
     # 用户名字段，必须为唯一
     USERNAME_FIELD = 'email'

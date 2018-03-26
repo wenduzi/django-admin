@@ -103,19 +103,31 @@
             <div data-scrollbar="true" data-height="100%">
                 <!-- begin sidebar nav -->
                 <ul class="nav">
-                    <li class="has-sub active" >
+                    <li class="has-sub">
                         <a href="javascript:">
                             <b class="caret pull-right"></b>
                             <i class="fa fa-laptop"></i>
                             <span>仪表盘</span>
                         </a>
                         <ul class="sub-menu">
-                            <li class="active"><a href="{% url 'week_report' %}">周报</a></li>
+                            <li><a href="{% url 'week_report' %}">周报</a></li>
                             <li><a href="{% url 'month_report' %}">月报</a></li>
                         </ul>
                     </li>
                     <li><a href="{% url 'monitor' %}"><i class="fa fa-area-chart"></i><span>指标监控</span> </a></li>
-                    <li><a href="{% url 'hosts' %}"><i class="fa fa-cubes"></i><span>主机管理</span></a></li>
+                    <li class="has-sub">
+                        <a href="javascript:">
+                            <b class="caret pull-right"></b>
+                            <i class="fa fa-cubes"></i>
+                            <span>主机管理</span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="{% url 'file' %}">文件分发</a></li>
+                            <li><a href="{% url 'command' %}">批量命令</a></li>
+                            <li><a href="{% url 'job' %}">定时任务</a></li>
+                            <li><a href="{% url 'audit' %}">审计</a></li>
+                        </ul>
+                    </li>
                     <!-- begin sidebar minify button -->
                     <li><a href="javascript:" class="sidebar-minify-btn" data-click="sidebar-minify"><i
                         class="fa fa-angle-double-left"></i></a></li>
@@ -164,6 +176,10 @@
         $(document).ready(function() {
             $("#sidebar a[href='{{ request.path }}']").parent().addClass("active");
             $("#sidebar a[href='{{ request.path }}']").parent().siblings().removeClass("active");
+            if ($("#sidebar a[href='{{ request.path }}']").parent().parent().parent().hasClass('has-sub')){
+                $("#sidebar a[href='{{ request.path }}']").parent().parent().parent().addClass("active");
+                $("#sidebar a[href='{{ request.path }}']").parent().parent().parent().siblings().removeClass("active");
+            }
         });
 	</script>
     {% block js %}
