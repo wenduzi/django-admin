@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'week_report',
-    'user_auth'
+    'user_manager'
 ]
 
 MIDDLEWARE = [
@@ -122,4 +122,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-AUTH_USER_MODEL = 'user_auth.UserProfile'
+AUTH_USER_MODEL = 'user_manager.UserProfile'
+
+LOGIN_URL = '/user_manager/login'

@@ -7,8 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <title>管理控制台</title>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        name="viewport" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
     <meta content="" name="description" />
     <meta content="" name="author" />
     <!-- ================== BEGIN BASE CSS STYLE ================== -->
@@ -28,9 +27,7 @@
     <link href="/static/assets/plugins/morris/morris.css" rel="stylesheet" />
     <!-- ================== END PAGE LEVEL CSS STYLE ================== -->
     <!-- ================== BEGIN BASE JS ================== -->
-
     <script src="/static/assets/plugins/pace/pace.min.js"></script>
-
     <!-- ================== END BASE JS ================== -->
 </head>
 <body>
@@ -47,20 +44,19 @@
             <div class="container-fluid">
                 <!-- begin mobile sidebar expand / collapse button -->
                 <div class="navbar-header">
-                    <a href="index_v2.html" class="navbar-brand"><span class="navbar-logo"></span>Admin | 控制台</a>
+                    <a href="{% url 'week_report' %}" class="navbar-brand"><span class="navbar-logo"></span>Admin | 控制台</a>
                     <button type="button" class="navbar-toggle" data-click="sidebar-toggled">
-                        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar">
-                        </span>
+                        <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
                     </button>
                 </div>
                 <!-- end mobile sidebar expand / collapse button -->
                 <!-- begin header navigation right -->
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown"><a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle f-s-14">
+                    <li class="dropdown"><a href="" data-toggle="dropdown" class="dropdown-toggle f-s-14">
                         <i class="fa fa-bell-o"></i><span class="label">5</span> </a>
                         <ul class="dropdown-menu media-list pull-right animated fadeInDown">
                             <li class="dropdown-header">Notifications</li>
-                            <li class="media"><a href="javascript:;">
+                            <li class="media"><a href="">
                                 <div class="media-left">
                                     <i class="fa fa-bug media-object bg-red"></i>
                                 </div>
@@ -71,7 +67,7 @@
                                         3 minutes ago</div>
                                 </div>
                             </a></li>
-                            <li class="media"><a href="javascript:;">
+                            <li class="media"><a href="">
                                 <div class="media-left">
                                     <i class="fa fa-envelope media-object bg-blue"></i>
                                 </div>
@@ -82,19 +78,17 @@
                                         2 hour ago</div>
                                 </div>
                             </a></li>
-                            <li class="dropdown-footer text-center"><a href="javascript:;">View more</a> </li>
+                            <li class="dropdown-footer text-center"><a href="">View more</a> </li>
                         </ul>
                     </li>
-                    <li class="dropdown navbar-user"><a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+                    <li class="dropdown navbar-user"><a href="" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="/static/assets/img/user-13.jpg" alt="" />
-                        <span class="hidden-xs">Adam Schwartz</span> <b class="caret"></b></a>
+                        <span class="hidden-xs">{{ request.user.name }}</span> <b class="caret"></b></a>
                         <ul class="dropdown-menu animated fadeInLeft">
-                            <li class="arrow"></li>
-                            <li><a href="javascript:;">Setting</a></li>
                             <li class="arrow"></li>
                             <li><a href="{% url 'password_change' %}">修改密码</a></li>
                             <li class="divider"></li>
-                            <li><a href="{% url 'logout' %}">Log Out</a></li>
+                            <li><a href="{% url 'logout' %}">退出登录</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -104,15 +98,40 @@
         </div>
         <!-- end #header -->
         <!-- begin #sidebar -->
-        {% block sidebar%}
-        {% endblock %}
+        <div id="sidebar" class="sidebar">
+            <!-- begin sidebar scrollbar -->
+            <div data-scrollbar="true" data-height="100%">
+                <!-- begin sidebar nav -->
+                <ul class="nav">
+                    <li class="has-sub active" >
+                        <a href="javascript:">
+                            <b class="caret pull-right"></b>
+                            <i class="fa fa-laptop"></i>
+                            <span>仪表盘</span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li class="active"><a href="{% url 'week_report' %}">周报</a></li>
+                            <li><a href="{% url 'month_report' %}">月报</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'monitor' %}"><i class="fa fa-area-chart"></i><span>指标监控</span> </a></li>
+                    <li><a href="{% url 'hosts' %}"><i class="fa fa-cubes"></i><span>主机管理</span></a></li>
+                    <!-- begin sidebar minify button -->
+                    <li><a href="javascript:" class="sidebar-minify-btn" data-click="sidebar-minify"><i
+                        class="fa fa-angle-double-left"></i></a></li>
+                    <!-- end sidebar minify button -->
+                 </ul>
+                 <!-- end sidebar nav -->
+            </div>
+            <!-- end sidebar scrollbar -->
+        </div>
         <!-- end #sidebar -->
         <!-- begin #content -->
         {% block content%}
         {% endblock %}
         <!-- end #content -->
         <!-- begin scroll to top btn -->
-        <a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade"
+        <a href="" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade"
             data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
         <!-- end scroll to top btn -->
     </div>
@@ -131,7 +150,6 @@
     <script src="/static/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
     <script src="/static/assets/plugins/jquery-cookie/jquery.cookie.js"></script>
     <!-- ================== END BASE JS ================== -->
-
     <!-- ================== BEGIN PAGE LEVEL JS ================== -->
     <script src="/static/assets/plugins/morris/raphael.min.js"></script>
     <script src="/static/assets/plugins/morris/morris.js"></script>
@@ -142,9 +160,13 @@
     <script src="/static/assets/js/dashboard-v2.min.js"></script>
     <script src="/static/assets/js/apps.min.js"></script>
     <!-- ================== END PAGE LEVEL JS ================== -->
-
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#sidebar a[href='{{ request.path }}']").parent().addClass("active");
+            $("#sidebar a[href='{{ request.path }}']").parent().siblings().removeClass("active");
+        });
+	</script>
     {% block js %}
     {% endblock %}
-
 </body>
 </html>

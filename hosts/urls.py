@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 """admin_site URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -13,16 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.conf.urls.static import static
-from django.conf import settings
-from django.conf.urls import url, include
 
+from django.conf.urls import url
+from . import views
+# from django.contrib.auth.views import password_change, password_change_done
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^hosts/', include('hosts.urls')),
-    url(r'^monitor/', include('monitor.urls')),
-    url(r'^dashboard/', include('week_report.urls'), name='week_report'),
-    url(r'^user_manager/', include('user_manager.urls'), name='user_manager'),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    url(r'^$', views.hosts, name='hosts'),
+]

@@ -20,8 +20,5 @@ from . import views
 # from django.contrib.auth.views import password_change, password_change_done
 
 urlpatterns = [
-    url(r'^login/$', views.user_login, name='login'),
-    url(r"^logout/$", views.user_logout, name="logout"),
-    url(r'^password-change/$', views.password_change, name='password_change'),
-    url(r'^password-change/done/$', views.password_change_done, name='password_change_done'),
+    url(r'^$', views.monitor, name='monitor'),
 ]
