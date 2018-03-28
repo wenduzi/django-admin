@@ -92,8 +92,8 @@ class UserProfile(AbstractBaseUser):
         return self.is_admin
 
     class Meta:
-        verbose_name = u'用户信息'
-        verbose_name_plural = u"用户信息"
+        verbose_name = u'00-用户信息'
+        verbose_name_plural = u"00-用户信息"
 
     def __unicode__(self):
         return self.name

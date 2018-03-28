@@ -80,8 +80,9 @@ class UserProfileAdmin(UserAdmin):
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': ('department', 'mobile', 'memo')}),
         ('API TOKEN info', {'fields': ('token',)}),
-        # (u'可管理的主机组', {'fields': ('host_groups',)}),
-        # (u'可管理的主机', {'fields': ('bind_hosts',)}),
+        (u'可管理的项目', {'fields': ('business_group',)}),
+        (u'可管理的应用', {'fields': ('application_type',)}),
+        (u'可管理的主机', {'fields': ('bind_hosts',)}),
         ('Permissions', {'fields': ('is_active', 'is_admin')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -93,4 +94,4 @@ class UserProfileAdmin(UserAdmin):
     )
     search_fields = ('email', 'department')
     ordering = ('email',)
-    filter_horizontal = ()
+    filter_horizontal = ('business_group', 'application_type', 'bind_hosts',)
