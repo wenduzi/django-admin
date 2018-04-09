@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^command', views.command, name='command'),
     url(r'^job', views.job, name='job'),
     url(r'^audit', views.audit, name='audit'),
+    url(r'^submit_cmd', views.submit_cmd, name='submit_cmd'),
 ]

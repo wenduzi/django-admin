@@ -1,9 +1,136 @@
 {% extends 'base.html' %}
+{% block content %}
+<div id="content" class="content">
+    {% include "host_list.html" %}
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-12 -->
+        <div class="col-md-8">
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                    </div>
+                    <h4 class="panel-title">批量执行命令</h4>
+                </div>
+                <div class="panel-body panel-form">
+                    <form action="/" name="cmd" method="POST">
+                        <textarea name="cmd" class="textarea form-control" placeholder="请输入命令行 ..." rows="8"></textarea>
+                        <button type="button" class="btn btn-primary pull-right" style="margin-top: 8px" onclick="SubmitTask('multi_cmd')">执行命令</button>
+                        <div id="error_msgs" style="margin-top: 10px;white-space:pre-wrap;"></div>
+                    </form>
+                </div>
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-6 -->
+    </div>
+    <!-- end row -->
+</div>
+{% endblock %}
 
 {% block js %}
     <script>
         $(document).ready(function() {
             App.init();
+        });
+
+        function SubmitTask(task_type) {
+            var error_list=[];
+            var data_list=[];
+            if(task_type==='multi_cmd'){
+                var selected_host=VerifyHostSelection();
+                var cmd_text=$.trim($("textarea[name='cmd']").val());
+                data_list['selected_host']=selected_host;
+                data_list['cmd_text']=cmd_text;
+                data_list['task_type']=task_type;
+                if (selected_host.length===0){
+                    error_list.push(["执行失败:  未选择任何主机!!!"]);
+                }
+                if (cmd_text.length===0){
+                    error_list.push(["执行失败:  未输入任何命令!!!"]);
+                }
+            }
+
+            if(error_list.length>0) {
+                $("#error_msgs").html('');
+                $.each(error_list,function (index,item) {
+                    var err_msgs="<p style='color:red;'>"+index+" -- "+item+"</p>";
+                    $("#error_msgs").append(err_msgs);
+                })
+            }
+            else{
+                data_list['csrfmiddlewaretoken']=$("input[name='csrfmiddlewaretoken']").val();
+                console.log(data_list['csrfmiddlewaretoken']);
+                $("#error_msgs").html('');
+                $.post("{% url 'submit_cmd' %}", data_list , function(callback){
+                    console.log(callback);
+                })
+            }
+        }
+
+        function VerifyHostSelection() {
+            var selected_host=[];
+            var all_host=$("label[input_label='host']").children();
+            $.each(all_host,function (index,ele) {
+                if(ele.checked){
+                    selected_host.push(ele.id)
+                }
+            });
+            return(selected_host)
+        }
+
+        $("#unfold-all").click(function(){
+          $("label[input_label='host']").fadeIn();
+        }) ;
+
+        $("#collapse-all").click(function(){
+          $("label[input_label='host']").fadeOut();
+        }) ;
+
+        $("#show-all-checked").click(function() {
+            $("label[input_label='host']").css('display', 'none').children().filter(":checked").parent().css('display', 'inline-block');
+        });
+
+        $("#show-all-unchecked").click(function(){
+          $("label[input_label='host']").css('display','none').children().not(":checked").parent().css('display','inline-block');
+        }) ;
+
+        $("span[id='check-all']").click(function(){
+            var btn_val = $(this).html();
+            if (btn_val === '全选'){
+                $("label[input_label='host']").children().prop('checked','true');
+                $(this).html("取消");
+            }else{
+                $("label[input_label='host']").children().removeProp("checked");
+                $(this).html("全选");
+            }});
+
+        $("span[data_label='group']").click(function() {
+            $(this).parent().parent().nextAll().toggle('fast');
+        });
+
+        $("span[data_label='select_group']").click(function(){
+        var btn_val = $(this).html();
+        if (btn_val === '全选'){
+           $(this).parent().parent().nextAll().children().prop('checked','true');
+           $(this).html("取消");
+        }else{
+           $(this).parent().parent().nextAll().children().removeProp("checked");
+           $(this).html("全选");
+        }
+        {#TotalChosenHosts()#}
+        });
+
+        $("#search-host").change(function(){
+             //console.log($(this).val());
+             var search_text =  $(this).val();
+             $('label[input_label=\'host\']').fadeOut();
+             var host_nodes = $("label[input_label='host']:contains("+  search_text+ ")");
+              host_nodes.fadeIn();
+             if (host_nodes.length ===0){
+                 $(this).val("找不到主机:"+  search_text);
+             }
         });
 	</script>
 {% endblock %}

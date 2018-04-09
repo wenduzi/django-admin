@@ -1,141 +1,131 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!--suppress JSValidateTypes -->
 <div id="content" class="content" style="padding: 10px;">
-    <!-- begin col-3 -->
-    <div class="col-lg-3" style="padding-left: 0;padding-right: 0" >
-        <div class="panel">
-            <div class="panel-heading">
-                <h3 class="panel-title" style="margin-bottom: 10px">主机组： <span class="label label-success">已选: <b id="total_chosen_hosts">0</b>台</span></h3>
-                <span id="unfold-all" class="label label-primary">展开</span>
-                <span id="collapse-all" class="label label-primary">收缩</span>
-                <span id="show-all-checked" class="label label-primary">已选</span>
-                <span id="show-all-unchecked" class="label label-primary">未选</span>
-                <span id="check-all" class="label label-primary">全选</span>
-{#                  <span id="uncheck-all" class="label label-primary">取消全选</span>#}
-            </div>
-            <div class="panel-body" style="padding-top: 0; padding-left: 10px">
-                <div class="input-group">
-                    <input type="text" id="search-host" class="form-control" placeholder="搜索主机..">
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-success"><i class="fa fa-search"></i></button>
+{% include 'host_list.html' %}
+    <div class="vertical-box" style="width:73%;background:#cacfd3;border-radius: 10px">
+        <div class="col-lg-6" style="padding:  10px 10px 0 10px">
+            <div class="panel panel-inverse" data-sortable-id="flot-chart-2">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
                     </div>
+                    <h4 class="panel-title">Flot Interactive Chart</h4>
                 </div>
-                <!--未分类主机-->
-                <div style="padding-top:15px;padding-bottom:0;">
-                    <form  class="form-block host-list">
-                        <ul class="list-group" style="margin-bottom: 10px">
-                            <li style="border:0;padding:0" class="list-group-item">
-                                <span class="badge badge-primary" data_label='group'><i class="fa fa-chevron-circle-down "></i></span>
-                                <span data_label="select_group" class="badge badge-primary">全选</span>
-                                <b>未分类主机 [{{  request.user.bind_hosts.select_related.count }}]</b>
-                            </li>
-                        </ul>
-
-                        {% for host in  request.user.bind_hosts.select_related %}
-                            <label input_label='host' style='display:none;margin-bottom: 0;margin-left: 10px'>
-                                <input type="checkbox" id="host_{{ host.id }}" style="vertical-align: text-bottom;">{{ host.host.hostname }}  ({{ host.host.ip_address }})
-                            </label>
-                        {% endfor %}
-                    </form>
-                    <!--end未分类主机-->
-
-                    <!--分类主机-->
-                    {% for g in request.user.business_group.select_related  %}
-                        <div style="padding-top:15px;padding-bottom:0;">
-                            <!--Block level checkboxes-->
-                            <!--===================================================-->
-                            <form  class="form-block host-list">
-                                <ul class="list-group"  style="margin-bottom: 10px">
-                                    <li style="border:0;padding:0" class="list-group-item">
-                                        <span class="badge badge-primary" data_label='group'><i class="fa fa-chevron-circle-down"></i></span>
-                                        <span data_label="select_group" class="badge badge-primary">全选</span>
-                                        <b>{{ g.business}}{{ g.function}}--{{ g.environments}} [{{  g.bindhosttouser_set.select_related.count}}]</b>
-                                    </li>
-                                </ul>
-
-                                {% for host in  g.bindhosttouser_set.select_related %}
-                                    <label input_label='host' style='display:none;margin-bottom: 0;margin-left: 10px'>
-                                        <input type="checkbox" id="host_{{ host.id }}" style="vertical-align: text-bottom;">{{ host.host.hostname }}  ({{ host.host.ip_address }})
-                                    </label>
-                                {% endfor %}
-                            </form>
-                            <!--===================================================-->
-                        </div>
-                    {% endfor %}
-                    <!-- end 分类主机-->
+                <div class="panel-body">
+                    <div id="interactive-chart" class="height-sm"></div>
                 </div>
             </div>
         </div>
-        <!--end panel-->
+        <div class="col-lg-6" style="padding:  10px 10px 0 10px">
+            <div class="panel panel-inverse" data-sortable-id="flot-chart-2">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                    </div>
+                    <h4 class="panel-title">Flot Interactive Chart</h4>
+                </div>
+                <div class="panel-body">
+                    <div id="interactive-chart" class="height-sm"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" style="padding: 0 10px 0 10px">
+            <div class="panel panel-inverse" data-sortable-id="flot-chart-2">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                    </div>
+                    <h4 class="panel-title">Flot Interactive Chart</h4>
+                </div>
+                <div class="panel-body">
+                    <div id="interactive-chart" class="height-sm"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- end col-3 -->
 </div>
 <!-- end content-->
-
 {% endblock %}
 
 
 {% block js %}
+    <script src="/static/assets/plugins/flot/jquery.flot.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.time.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.resize.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.pie.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.stack.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.crosshair.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.categories.js"></script>
+	<script src="/static/assets/js/chart-flot.demo.min.js"></script>
+    <!--suppress JSJQueryEfficiency, JSValidateTypes -->
+    <script>
+        $(document).ready(function() {
+            App.init();
+        });
+        var handleInteractiveChart=function(){"use strict";function e(e,t,n){$('<div id="tooltip" class="flot-tooltip">'+n+"</div>").css({top:t-45,left:e-55}).appendTo("body").fadeIn(200)}if($("#interactive-chart").length!==0){var t=[[0,42],[1,53],[2,66],[3,60],[4,68],[5,66],[6,71],[7,75],[8,69],[9,70],[10,68],[11,72],[12,78],[13,86]];var n=[[0,12],[1,26],[2,13],[3,18],[4,35],[5,23],[6,18],[7,35],[8,24],[9,14],[10,14],[11,29],[12,30],[13,43]];$.plot($("#interactive-chart"),[{data:t,label:"Page Views",color:purple,lines:{show:true,fill:false,lineWidth:2},points:{show:false,radius:5,fillColor:"#fff"},shadowSize:0},{data:n,label:"Visitors",color:green,lines:{show:true,fill:false,lineWidth:2,fillColor:""},points:{show:false,radius:3,fillColor:"#fff"},shadowSize:0}],{xaxis:{tickColor:"#ddd",tickSize:2},yaxis:{tickColor:"#ddd",tickSize:20},grid:{hoverable:true,clickable:true,tickColor:"#ccc",borderWidth:1,borderColor:"#ddd"},legend:{labelBoxBorderColor:"#ddd",margin:0,noColumns:1,show:true}});var r=null;$("#interactive-chart").bind("plothover",function(t,n,i){$("#x").text(n.x.toFixed(2));$("#y").text(n.y.toFixed(2));if(i){if(r!==i.dataIndex){r=i.dataIndex;$("#tooltip").remove();var s=i.datapoint[1].toFixed(2);var o=i.series.label+" "+s;e(i.pageX,i.pageY,o)}}else{$("#tooltip").remove();r=null}t.preventDefault()})}};
+        handleInteractiveChart();
+        $("#unfold-all").click(function(){
+          $("label[input_label='host']").fadeIn();
+        }) ;
 
-<script>
-    $(document).ready(function() {
-        App.init();
-    });
+        $("#collapse-all").click(function(){
+          $("label[input_label='host']").fadeOut();
+        }) ;
 
-    $("#unfold-all").click(function(){
-      $("label[input_label='host']").fadeIn();
-    }) ;
+        $("#show-all-checked").click(function() {
+            $("label[input_label='host']").css('display', 'none').children().filter(":checked").parent().css('display', 'inline-block');
+        });
 
-    $("#collapse-all").click(function(){
-      $("label[input_label='host']").fadeOut();
-    }) ;
+        $("#show-all-unchecked").click(function(){
+          $("label[input_label='host']").css('display','none').children().not(":checked").parent().css('display','inline-block');
+        }) ;
 
-    $("#show-all-checked").click(function() {
-        $("label[input_label='host']").css('display', 'none').children().filter(":checked").parent().css('display', 'inline-block');
-    });
+        $("span[id='check-all']").click(function(){
+            var btn_val = $(this).html();
+            if (btn_val === '全选'){
+                $("label[input_label='host']").children().prop('checked','true');
+                $(this).html("取消");
+            }else{
+                $("label[input_label='host']").children().removeProp("checked");
+                $(this).html("全选");
+            }});
 
-    $("#show-all-unchecked").click(function(){
-      $("label[input_label='host']").css('display','none').children().not(":checked").parent().css('display','inline-block');
-    }) ;
+        $("span[data_label='group']").click(function() {
+            $(this).parent().parent().nextAll().toggle('fast');
+        });
 
-    $("span[id='check-all']").click(function(){
+        $("span[data_label='select_group']").click(function(){
         var btn_val = $(this).html();
         if (btn_val === '全选'){
-            $("label[input_label='host']").children().prop('checked','true');
-            $(this).html("取消");
+           $(this).parent().parent().nextAll().children().prop('checked','true');
+           $(this).html("取消");
         }else{
-            $("label[input_label='host']").children().removeProp("checked");
-            $(this).html("全选");
-        }});
+           $(this).parent().parent().nextAll().children().removeProp("checked");
+           $(this).html("全选");
+        }
+        {#TotalChosenHosts()#}
+        });
 
-    $("span[data_label='group']").click(function() {
-        $(this).parent().parent().nextAll().toggle('fast');
-    });
-
-    $("span[data_label='select_group']").click(function(){
-    var btn_val = $(this).html();
-    if (btn_val === '全选'){
-       $(this).parent().parent().nextAll().children().prop('checked','true');
-       $(this).html("取消");
-    }else{
-       $(this).parent().parent().nextAll().children().removeProp("checked");
-       $(this).html("全选");
-    }
-    {#TotalChosenHosts()#}
-    });
-
-    $("#search-host").change(function(){
-         //console.log($(this).val());
-         var search_text =  $(this).val();
-         $('label[input_label=\'host\']').fadeOut();
-         var host_nodes = $("label[input_label='host']:contains("+  search_text+ ")");
-          host_nodes.fadeIn();
-         if (host_nodes.length ===0){
-             $(this).val("找不到主机:"+  search_text);
-         }
-    });
-</script>
+        $("#search-host").change(function(){
+             //console.log($(this).val());
+             var search_text =  $(this).val();
+             $('label[input_label=\'host\']').fadeOut();
+             var host_nodes = $("label[input_label='host']:contains("+  search_text+ ")");
+              host_nodes.fadeIn();
+             if (host_nodes.length ===0){
+                 $(this).val("找不到主机:"+  search_text);
+             }
+        });
+    </script>
 
 {% endblock %}

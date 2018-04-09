@@ -17,3 +17,8 @@ def job(request):
 
 def audit(request):
     return render(request, 'hosts/audit.html')
+
+
+def submit_cmd(request):
+    print(request.POST)
+    return render(request, 'hosts/command.html')
