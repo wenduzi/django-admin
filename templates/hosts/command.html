@@ -14,9 +14,9 @@
                     <h4 class="panel-title">批量执行命令</h4>
                 </div>
                 <div class="panel-body panel-form">
-                    <form action="/" name="cmd" method="POST">
+                    <form action="/" method="POST">
                         <textarea name="cmd" class="textarea form-control" placeholder="请输入命令行 ..." rows="8"></textarea>
-                        <button type="button" class="btn btn-primary pull-right" style="margin-top: 8px" onclick="SubmitTask('multi_cmd')">执行命令</button>
+                        <button type="button" class="btn btn-success pull-right" style="margin-top: 8px" onclick="SubmitTask('multi_cmd')">执行命令</button>
                         <div id="error_msgs" style="margin-top: 10px;white-space:pre-wrap;"></div>
                     </form>
                 </div>
@@ -37,7 +37,7 @@
 
         function SubmitTask(task_type) {
             var error_list=[];
-            var data_list=[];
+            var data_list={};
             if(task_type==='multi_cmd'){
                 var selected_host=VerifyHostSelection();
                 var cmd_text=$.trim($("textarea[name='cmd']").val());
@@ -60,9 +60,8 @@
                 })
             }
             else{
-                data_list['csrfmiddlewaretoken']=$("input[name='csrfmiddlewaretoken']").val();
-                console.log(data_list['csrfmiddlewaretoken']);
                 $("#error_msgs").html('');
+                console.log(data_list);
                 $.post("{% url 'submit_cmd' %}", data_list , function(callback){
                     console.log(callback);
                 })
