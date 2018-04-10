@@ -30,10 +30,6 @@ def audit(request):
 @login_required()
 @csrf_exempt
 def submit_cmd(request):
-    print(request.POST)
-    print(request.POST.get('task_type'))
-    print(request.POST.get('cmd_text'))
-    print(request.POST.getlist('selected_host[]'))
-    task_obj=task.Task(request)
-    task_obj.handle()
+    task_obj = task.Task(request)
+    res = task_obj.handle()
     return HttpResponse('DDD')
