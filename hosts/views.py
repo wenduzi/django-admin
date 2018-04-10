@@ -2,6 +2,7 @@ from django.shortcuts import (render, HttpResponse)
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from hosts import task
+import json
 # from django.template import RequestContext
 
 # Create your views here.
@@ -32,4 +33,5 @@ def audit(request):
 def submit_cmd(request):
     task_obj = task.Task(request)
     res = task_obj.handle()
-    return HttpResponse('DDD')
+    print(res)
+    return HttpResponse(json.dumps(res))

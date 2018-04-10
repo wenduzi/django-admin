@@ -35,6 +35,13 @@ class ApplicationTypeAdmin(admin.ModelAdmin):
     list_display = ('name', 'product')
 
 
+class TaskLogAdmin(admin.ModelAdmin):
+    list_display = ('start_time', 'task_type', 'user', 'get_hosts', 'cmd_text')
+
+
+class TaskLogDetailAdmin(admin.ModelAdmin):
+    list_display = ('child_of_task', 'bind_host', 'result')
+
 admin.site.register(models.UserProfile, UserProfileAdmin)
 admin.site.register(hosts_models.Host, HostAdmin)
 admin.site.register(hosts_models.HostUser, HostUserAdmin)
@@ -42,3 +49,5 @@ admin.site.register(hosts_models.IDC, IDCAdmin)
 admin.site.register(hosts_models.BusinessGroup, BusinessGroupAdmin)
 admin.site.register(hosts_models.ApplicationType, ApplicationTypeAdmin)
 admin.site.register(hosts_models.BindHostToUser, BindHostToUserAdmin)
+admin.site.register(hosts_models.TaskLog, TaskLogAdmin)
+admin.site.register(hosts_models.TaskLogDetail, )

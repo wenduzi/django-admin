@@ -67,7 +67,7 @@ class BusinessGroup(models.Model):
         ('开发', '开发'),
         ('测试', '测试'),
     )
-    business = models.CharField(max_length=64)
+    business = models.CharField(max_length=64, blank=True, null=True)
     function = models.CharField(max_length=64, blank=True, null=True)
     environments = models.CharField(choices=environments_choices, max_length=64, default='app')
     memo = models.TextField(blank=True, null=True)
@@ -127,3 +127,45 @@ class BindHostToUser(models.Model):
     def get_business_group(self):
 
         return ','.join([g.business for g in self.business_group.select_related()])
+
+
+class TaskLog(models.Model):
+    start_time = models.DateTimeField(auto_now_add=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+    task_type_choices = (('multi_cmd', "命令"), ('cron_job', "定时任务"))
+    task_type = models.CharField(choices=task_type_choices, max_length=50)
+    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    hosts = models.ManyToManyField('BindHostToUser')
+    cmd_text = models.TextField()
+    expire_time = models.IntegerField(default=30)
+    task_pid = models.IntegerField(default=0)
+    note = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return "taskID:%s cmd:%s" % (self.id, self.cmd_text)
+
+    class Meta:
+        app_label = "user_manager"
+        verbose_name = u'CMD任务'
+        verbose_name_plural = u'CMD任务'
+
+    def get_hosts(self):
+        return ','.join([g.host.hostname for g in self.hosts.select_related()])
+
+
+class TaskLogDetail(models.Model):
+    child_of_task = models.ForeignKey('TaskLog', on_delete=models.CASCADE)
+    bind_host = models.ForeignKey('BindHostToUser', on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)  # finished date
+    event_log = models.TextField()
+    result_choices = (('success', 'Success'), ('failed', 'Failed'), ('unknown', 'Unknown'))
+    result = models.CharField(choices=result_choices, max_length=30, default='unknown')
+    note = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return "child of:%s result:%s" % (self.child_of_task.id, self.result)
+
+    class Meta:
+        app_label = "user_manager"
+        verbose_name = u'CMD任务日志'
+        verbose_name_plural = u'CMD任务日志'
