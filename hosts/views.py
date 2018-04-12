@@ -1,7 +1,7 @@
 from django.shortcuts import (render, HttpResponse)
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from hosts import task
+from hosts import task, utils
 import json
 # from django.template import RequestContext
 
@@ -33,5 +33,11 @@ def audit(request):
 def submit_cmd(request):
     task_obj = task.Task(request)
     res = task_obj.handle()
-    print(res)
     return HttpResponse(json.dumps(res))
+
+
+@login_required()
+def get_cmd_result(request):
+    task_obj = task.Task(request)
+    res = task_obj.get_cmd_result()
+    return HttpResponse(json.dumps(res, default=utils.json_date_handler))

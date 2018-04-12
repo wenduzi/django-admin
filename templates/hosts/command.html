@@ -18,6 +18,7 @@
                         <textarea name="cmd" class="textarea form-control" placeholder="请输入命令行 ..." rows="8"></textarea>
                         <button type="button" class="btn btn-success pull-right" style="margin: 8px" onclick="SubmitTask('multi_cmd')">执行命令</button>
                         <div id="error_msgs" style="margin-top: 10px;white-space:pre-wrap;"></div>
+                        <div id="result_msgs"></div>
                     </form>
                 </div>
             </div>
@@ -63,9 +64,25 @@
                 $("#error_msgs").html('');
                 console.log(data_list);
                 $.post("{% url 'submit_cmd' %}", data_list , function(callback){
-                    console.log(callback);
+                    var task_id_obj = JSON.parse(callback);
+                    GetTaskResult(task_id_obj.task_id);
                 })
             }
+        }
+
+        function GetTaskResult(task_id) {
+            $.getJSON('{% url 'get_cmd_result' %}', {task_id:task_id}, function(callback){
+                PrintOnPage(callback);
+                console.log(callback);
+            })
+        }
+
+        function PrintOnPage(callback) {
+            $("#result_msgs").html('');
+            $.each(callback,function (index,item) {
+                var result_msgs="<p style='color:red;'>"+index+' - '+item.id+' - '+item.date+' - '+item.bind_host__host__hostname+'('+item.bind_host__host__ip_address+')'+'--->'+item.result+item.event_log+"</p>";
+                $("#result_msgs").append(result_msgs);
+            })
         }
 
         function VerifyHostSelection() {

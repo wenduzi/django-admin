@@ -127,3 +127,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 AUTH_USER_MODEL = 'user_manager.UserProfile'
 
 LOGIN_URL = '/user_manager/login'
+
+SCRIPT_ROOT = '%s/hosts/backends/exec_cmd.py' % BASE_DIR
+RunType = 'by_paramiko'

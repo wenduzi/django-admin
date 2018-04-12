@@ -1,5 +1,8 @@
 from hosts import models
 from django.db import transaction
+from admin_site import settings
+import subprocess
+import os
 
 
 class Task(object):
@@ -17,11 +20,10 @@ class Task(object):
 
     @transaction.atomic
     def multi_cmd(self):
-        print(self.request.POST.get('task_type'))
-        print(self.request.POST.get('cmd_text'))
+        # print(self.request.POST.get('task_type'))
+        # print(self.request.POST.get('cmd_text'))
+        # print(selected_host)
         selected_host = self.request.POST.getlist('selected_host[]')
-        print(selected_host)
-        print('doing something')
         task_obj = models.TaskLog(
             user=self.request.user,
             task_type=self.task_type,
@@ -38,7 +40,27 @@ class Task(object):
                 event_log="N/A",
             )
             obj.save()
+        p = subprocess.Popen([
+            'python',
+            settings.SCRIPT_ROOT,
+            '-task_id', str(task_obj.id),
+            '-run_type', settings.RunType,
+        ], preexec_fn=os.setsid)
+        print('----->pid:', p.pid)
+
         return {'task_id': task_obj.id}
+
+    def get_cmd_result(self):
+        task_id = self.request.GET.get('task_id')
+        if task_id:
+            res_list = models.TaskLogDetail.objects.filter(child_of_task=task_id)
+            return list(res_list.values('id',
+                                        'bind_host__host__hostname',
+                                        'bind_host__host__ip_address',
+                                        'date',
+                                        'event_log',
+                                        'result'
+                                        ))
 
     def cron_job(self):
         pass
