@@ -134,6 +134,7 @@ class TaskLog(models.Model):
     end_time = models.DateTimeField(null=True, blank=True)
     task_type_choices = (('multi_cmd', "命令"), ('cron_job', "定时任务"))
     task_type = models.CharField(choices=task_type_choices, max_length=50)
+    # noinspection PyUnresolvedReferences
     user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
     hosts = models.ManyToManyField('BindHostToUser')
     cmd_text = models.TextField()
@@ -142,7 +143,7 @@ class TaskLog(models.Model):
     note = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return "taskID:%s cmd:%s" % (self.id, self.cmd_text)
+        return "taskID:%s" % (self.id,)
 
     class Meta:
         app_label = "user_manager"
@@ -155,8 +156,10 @@ class TaskLog(models.Model):
 
 class TaskLogDetail(models.Model):
     child_of_task = models.ForeignKey('TaskLog', on_delete=models.CASCADE)
+    # noinspection PyUnresolvedReferences
+    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
     bind_host = models.ForeignKey('BindHostToUser', on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)  # finished date
+    end_time = models.DateTimeField(auto_now_add=True)  # finished date
     event_log = models.TextField()
     result_choices = (('success', 'Success'), ('failed', 'Failed'), ('unknown', 'Unknown'))
     result = models.CharField(choices=result_choices, max_length=30, default='unknown')
@@ -167,5 +170,23 @@ class TaskLogDetail(models.Model):
 
     class Meta:
         app_label = "user_manager"
-        verbose_name = u'CMD任务日志'
-        verbose_name_plural = u'CMD任务日志'
+        verbose_name = u'CMD子任务日志'
+        verbose_name_plural = u'CMD子任务日志'
+
+
+class TaskSummary(models.Model):
+    # noinspection PyUnresolvedReferences
+    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
+    task_id = models.ForeignKey('TaskLog', on_delete=models.CASCADE)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    cmd_text = models.TextField()
+    task_result = models.CharField(max_length=30, default='unknown')
+
+    def __str__(self):
+        return "task_id:%s result:%s" % (self.task_id, self.task_result)
+
+    class Meta:
+        app_label = "user_manager"
+        verbose_name = u'CMD任务汇总'
+        verbose_name_plural = u'CMD任务汇总'

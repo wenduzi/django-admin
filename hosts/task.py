@@ -35,6 +35,7 @@ class Task(object):
         task_obj.hosts.add(*selected_host)
         for host_id in selected_host:
             obj = models.TaskLogDetail(
+                user=self.request.user,
                 child_of_task_id=task_obj.id,
                 bind_host_id=host_id,
                 event_log="N/A",
@@ -51,16 +52,18 @@ class Task(object):
         return {'task_id': task_obj.id}
 
     def get_cmd_result(self):
-        task_id = self.request.GET.get('task_id')
-        if task_id:
-            res_list = models.TaskLogDetail.objects.filter(child_of_task=task_id)
-            return list(res_list.values('id',
-                                        'bind_host__host__hostname',
-                                        'bind_host__host__ip_address',
-                                        'date',
-                                        'event_log',
-                                        'result'
-                                        ))
+        # task_id = self.request.GET.get('task_id')
+        user = self.request.user
+        if user:
+            res_list = models.TaskLogDetail.objects.filter(user=user)
+            print(res_list)
+            # print(res_list.values())
+            # print(list(res_list.values('user',
+            #                            'child_of_task',
+            #                            'child_of_task__start_time',
+            #                            'end_time',
+            #                            'child_of_task__cmd_text'
+            #                            )))
 
     def cron_job(self):
         pass

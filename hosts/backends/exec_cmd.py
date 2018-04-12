@@ -19,15 +19,40 @@ def by_paramiko(task_id):
         task_obj = models.TaskLog.objects.get(id=task_id)
         hosts = task_obj.hosts.select_related()
         cmd_text = task_obj.cmd_text
-        print(hosts)
         pool = multiprocessing.Pool(processes=5)
         for host in hosts:
             pool.apply_async(paramiko_ssh, args=(host, cmd_text))
         pool.close()
         pool.join()
+        set_task_summary(task_id)
 
     except ObjectDoesNotExist as e:
         sys.exit(e)
+
+
+def set_task_summary(task_id):
+    task_obj = models.TaskLog.objects.get(id=task_id)
+    taskdetail_obj = models.TaskLogDetail.objects.filter(child_of_task=task_id)
+    child_task_result = []
+    for taskdetail in taskdetail_obj:
+        child_task_result.append(taskdetail.result)
+
+    if 'unknown' in child_task_result:
+        task_result = 'unkown'
+    elif 'failed' in child_task_result:
+        task_result = 'faild'
+    else:
+        task_result = 'success'
+
+    obj = models.TaskSummary(
+        user=task_obj.user,
+        task_id=task_obj,
+        start_time=task_obj.start_time,
+        end_time=timezone.now(),
+        cmd_text=task_obj.cmd_text,
+        task_result=task_result,
+    )
+    obj.save()
 
 
 def paramiko_ssh(host, cmd_text):

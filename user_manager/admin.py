@@ -40,7 +40,10 @@ class TaskLogAdmin(admin.ModelAdmin):
 
 
 class TaskLogDetailAdmin(admin.ModelAdmin):
-    list_display = ('child_of_task', 'bind_host', 'result')
+    list_display = ('user', 'child_of_task', 'bind_host', 'result')
+
+class TaskSummaryAdmin(admin.ModelAdmin):
+    list_display = ('user', 'task_id', 'start_time', 'end_time', 'cmd_text', 'task_result')
 
 
 admin.site.register(models.UserProfile, UserProfileAdmin)
@@ -52,3 +55,4 @@ admin.site.register(hosts_models.ApplicationType, ApplicationTypeAdmin)
 admin.site.register(hosts_models.BindHostToUser, BindHostToUserAdmin)
 admin.site.register(hosts_models.TaskLog, TaskLogAdmin)
 admin.site.register(hosts_models.TaskLogDetail, TaskLogDetailAdmin)
+admin.site.register(hosts_models.TaskSummary,  TaskSummaryAdmin)
