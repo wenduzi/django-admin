@@ -20,7 +20,6 @@ from . import views
 # from django.contrib.auth.views import password_change, password_change_done
 
 urlpatterns = [
-    url(r'^file', views.file, name='file'),
     url(r'^command', views.command, name='command'),
     url(r'^job', views.job, name='job'),
     url(r'^audit', views.audit, name='audit'),

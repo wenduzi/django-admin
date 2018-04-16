@@ -23,6 +23,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^hosts/', include('hosts.urls')),
     url(r'^monitor/', include('monitor.urls')),
-    url(r'^dashboard/', include('week_report.urls'), name='week_report'),
+    url(r'^dashboard/', include('reports.urls'), name='reports'),
     url(r'^user_manager/', include('user_manager.urls'), name='user_manager'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'hosts',
     'monitor',
     'user_manager',
-    'week_report',
+    'reports',
 ]
 
 MIDDLEWARE = [

@@ -56,7 +56,7 @@ class Task(object):
         user = self.request.user
         if user:
             res_list = models.TaskLogDetail.objects.filter(user=user)
-            print(res_list)
+            # print(res_list)
             # print(res_list.values())
             # print(list(res_list.values('user',
             #                            'child_of_task',

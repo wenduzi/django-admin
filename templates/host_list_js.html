@@ -1,0 +1,52 @@
+$("#unfold-all").click(function(){
+  $("label[input_label='host']").fadeIn();
+}) ;
+
+$("#collapse-all").click(function(){
+  $("label[input_label='host']").fadeOut();
+}) ;
+
+$("#show-all-checked").click(function() {
+    $("label[input_label='host']").css('display', 'none').children().filter(":checked").parent().css('display', 'inline-block');
+});
+
+$("#show-all-unchecked").click(function(){
+  $("label[input_label='host']").css('display','none').children().not(":checked").parent().css('display','inline-block');
+}) ;
+
+$("span[id='check-all']").click(function(){
+    var btn_val = $(this).html();
+    if (btn_val === '全选'){
+        $("label[input_label='host']").children().prop('checked','true');
+        $(this).html("取消");
+    }else{
+        $("label[input_label='host']").children().removeProp("checked");
+        $(this).html("全选");
+    }});
+
+$("span[data_label='group']").click(function() {
+    $(this).parent().parent().nextAll().toggle('fast');
+});
+
+$("span[data_label='select_group']").click(function(){
+var btn_val = $(this).html();
+if (btn_val === '全选'){
+   $(this).parent().parent().nextAll().children().prop('checked','true');
+   $(this).html("取消");
+}else{
+   $(this).parent().parent().nextAll().children().removeProp("checked");
+   $(this).html("全选");
+}
+{#TotalChosenHosts()#}
+});
+
+$("#search-host").change(function(){
+     //console.log($(this).val());
+     var search_text =  $(this).val();
+     $('label[input_label=\'host\']').fadeOut();
+     var host_nodes = $("label[input_label='host']:contains("+  search_text+ ")");
+      host_nodes.fadeIn();
+     if (host_nodes.length ===0){
+         $(this).val("找不到主机:"+  search_text);
+     }
+});

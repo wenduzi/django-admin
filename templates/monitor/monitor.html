@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="content" class="content" style="padding: 10px;">
+{% include 'host_list.html' %}
+    <div class="vertical-box" style="width:73%;background:#cacfd3;border-radius: 10px">
+        <div class="col-lg-6" style="padding:  10px 10px 0 10px">
+            <div class="panel panel-inverse" data-sortable-id="flot-chart-2">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                    </div>
+                    <h4 class="panel-title">Flot Interactive Chart</h4>
+                </div>
+                <div class="panel-body">
+                    <div id="interactive-chart" class="height-sm"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" style="padding:  10px 10px 0 10px">
+            <div class="panel panel-inverse" data-sortable-id="flot-chart-2">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                    </div>
+                    <h4 class="panel-title">Flot Interactive Chart</h4>
+                </div>
+                <div class="panel-body">
+                    <div id="interactive-chart" class="height-sm"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" style="padding: 0 10px 0 10px">
+            <div class="panel panel-inverse" data-sortable-id="flot-chart-2">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-default" data-click="panel-expand"><i class="fa fa-expand"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-warning" data-click="panel-collapse"><i class="fa fa-minus"></i></a>
+                        <a href="javascript:" class="btn btn-xs btn-icon btn-circle btn-danger" data-click="panel-remove"><i class="fa fa-times"></i></a>
+                    </div>
+                    <h4 class="panel-title">Flot Interactive Chart</h4>
+                </div>
+                <div class="panel-body">
+                    <div id="interactive-chart" class="height-sm"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end content-->
+{% endblock %}
+
+
+{% block js %}
+    <script src="/static/assets/plugins/flot/jquery.flot.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.time.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.resize.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.pie.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.stack.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.crosshair.min.js"></script>
+	<script src="/static/assets/plugins/flot/jquery.flot.categories.js"></script>
+	<script src="/static/assets/js/chart-flot.demo.min.js"></script>
+    <!--suppress JSJQueryEfficiency, JSValidateTypes -->
+    <script>
+        $(document).ready(function() {
+            App.init();
+        });
+        var handleInteractiveChart=function(){"use strict";function e(e,t,n){$('<div id="tooltip" class="flot-tooltip">'+n+"</div>").css({top:t-45,left:e-55}).appendTo("body").fadeIn(200)}if($("#interactive-chart").length!==0){var t=[[0,42],[1,53],[2,66],[3,60],[4,68],[5,66],[6,71],[7,75],[8,69],[9,70],[10,68],[11,72],[12,78],[13,86]];var n=[[0,12],[1,26],[2,13],[3,18],[4,35],[5,23],[6,18],[7,35],[8,24],[9,14],[10,14],[11,29],[12,30],[13,43]];$.plot($("#interactive-chart"),[{data:t,label:"Page Views",color:purple,lines:{show:true,fill:false,lineWidth:2},points:{show:false,radius:5,fillColor:"#fff"},shadowSize:0},{data:n,label:"Visitors",color:green,lines:{show:true,fill:false,lineWidth:2,fillColor:""},points:{show:false,radius:3,fillColor:"#fff"},shadowSize:0}],{xaxis:{tickColor:"#ddd",tickSize:2},yaxis:{tickColor:"#ddd",tickSize:20},grid:{hoverable:true,clickable:true,tickColor:"#ccc",borderWidth:1,borderColor:"#ddd"},legend:{labelBoxBorderColor:"#ddd",margin:0,noColumns:1,show:true}});var r=null;$("#interactive-chart").bind("plothover",function(t,n,i){$("#x").text(n.x.toFixed(2));$("#y").text(n.y.toFixed(2));if(i){if(r!==i.dataIndex){r=i.dataIndex;$("#tooltip").remove();var s=i.datapoint[1].toFixed(2);var o=i.series.label+" "+s;e(i.pageX,i.pageY,o)}}else{$("#tooltip").remove();r=null}t.preventDefault()})}};
+        handleInteractiveChart();
+        $("#unfold-all").click(function(){
+          $("label[input_label='host']").fadeIn();
+        }) ;
+
+        {% include 'host_list_js.html' %}
+    </script>
+
+{% endblock %}

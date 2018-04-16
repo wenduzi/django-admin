@@ -1,9 +1,45 @@
 {% extends 'base.html' %}
 
+{% block content  %}
+    <div id="content" class="content">
+        {% include 'host_list.html' %}
+    <!-- begin row -->
+    <div class="row">
+        <!-- begin col-12 -->
+        <div class="col-md-8">
+            <select id="task_type">
+                <option>批量命令</option>
+                <option>文件传输</option>
+            </select>
+            <!-- begin panel -->
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <div class="panel-heading-btn">
+                    </div>
+                    <h4 class="panel-title">批量执行命令</h4>
+                </div>
+                <div class="panel-body panel-form">
+                    <form action="/" method="POST">
+                        <textarea name="cmd" class="textarea form-control" placeholder="请输入命令行 ..." rows="8"></textarea>
+                        <button type="button" class="btn btn-success pull-right" style="margin: 8px" onclick="SubmitTask('multi_cmd')">执行命令</button>
+                        <div id="error_msgs" style="margin-top: 10px;white-space:pre-wrap;"></div>
+                        <div id="result_msgs"></div>
+                    </form>
+                </div>
+            </div>
+            <!-- end panel -->
+        </div>
+        <!-- end col-6 -->
+    </div>
+    <!-- end row -->
+    </div>
+{% endblock %}
+
 {% block js %}
     <script>
         $(document).ready(function() {
             App.init();
         });
+    {% include 'host_list_js.html' %}
 	</script>
 {% endblock %}
