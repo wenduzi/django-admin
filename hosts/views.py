@@ -1,8 +1,10 @@
 from django.shortcuts import (render, HttpResponse)
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from hosts import task, utils
+from hosts import task, utils, models
+from elasticsearch import Elasticsearch
 import json
+from django.utils import timezone
 
 
 # 批量命令
@@ -24,6 +26,21 @@ def get_cmd_result(request):
     task_obj = task.Task(request)
     res = task_obj.get_cmd_result()
     return HttpResponse(json.dumps(res, default=utils.json_date_handler))
+
+
+@login_required()
+def get_cpu_usage(request):
+    selected_host = request.GET.getlist('selected_host[]')
+    for host_id in selected_host:
+        host_id = host_id
+        host = models.BindHostToUser.objects.get(id=host_id)
+        hostname = host.host.hostname
+    es = Elasticsearch(['11.11.66.148:9200'])
+    query = {'query': {'term': {'name': 'jack'}}}
+    es_result = es.search(index='metricbeat-6.2.4-2018.04.25', body=query)
+    for h in es_result['aggregations']['envent_id']['buckets']:
+        print(h)
+    return HttpResponse(json.dumps(h, default=utils.json_date_handler))
 
 
 # 定时任务

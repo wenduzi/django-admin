@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^audit', views.audit, name='audit'),
     url(r'^submit_cmd', views.submit_cmd, name='submit_cmd'),
     url(r'^get_cmd_result', views.get_cmd_result, name='get_cmd_result'),
+    url(r'^get_cpu_usage', views.get_cpu_usage, name='get_cpu_usage'),
 ]
