@@ -33,32 +33,33 @@ def get_cmd_result(request):
 @login_required()
 def get_cpu_usage(request):
     global host
+    response_list = []
     selected_host = request.GET.getlist('selected_host[]')
-    for host_id in selected_host:
-        host_id = host_id
-        host = models.BindHostToUser.objects.get(id=host_id)
-    es = Elasticsearch(['11.11.66.148:9200'], timeout=120)
-    end_t = timezone('utc').localize(datetime.now()).astimezone(pytz.timezone('Asia/Shanghai'))
-    start_t = end_t - timedelta(minutes=10)
-    query = {"size": 10000, "query": {"bool": {"filter": [{"match": {"beat.hostname": host.host.hostname}},
-                                           {"exists": {"field": "system.process.cpu.total.pct"}},
-                                           {"range": {"@timestamp": {"gte": start_t, "lte": end_t}}}]
-                                }}
-             }
-    es_result = es.search(index='metricbeat-6.2.4-2018.04.26', body=query)
-    if es_result['hits']['total'] != 0:
-        data_list = []
-        for h in es_result['hits']['hits']:
-            data = []
-            timestamp = h['_source']['@timestamp']
-            cpu_pct = h['_source']['system']['process']['cpu']['total']['pct']
-            data.append(timestamp)
-            data.append(cpu_pct)
-            data_list.append(data)
-            print(data)
-        print(data_list)
+    if len(selected_host) != 0:
+        for host_id in selected_host:
+            host_id = host_id
+            host = models.BindHostToUser.objects.get(id=host_id)
+        es = Elasticsearch(['11.11.66.148:9200'], timeout=120)
+        end_t = timezone('utc').localize(datetime.now()).astimezone(pytz.timezone('Asia/Shanghai'))
+        start_t = end_t - timedelta(minutes=10)
+        query = {"size": 10000, "query": {"bool": {"filter": [{"match": {"beat.hostname": host.host.hostname}},
+                                                              {"exists": {"field": "system.process.cpu.total.pct"}},
+                                                              {"range": {"@timestamp": {"gte": start_t, "lte": end_t}}}]
+                                                   }}
+                 }
 
-    return HttpResponse(json.dumps(data_list, default=utils.json_date_handler))
+        es_result = es.search(index='metricbeat-6.2.4-2018.04.27', body=query)
+
+        if es_result['hits']['total'] != 0:
+            for h in es_result['hits']['hits']:
+                data = []
+                timestamp = h['_source']['@timestamp']
+                cpu_pct = h['_source']['system']['process']['cpu']['total']['pct']
+                data.append(int(timestamp))
+                data.append(cpu_pct)
+                response_list.append(data)
+
+    return HttpResponse(json.dumps(response_list, default=utils.json_date_handler))
 
 
 # 定时任务
