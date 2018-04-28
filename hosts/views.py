@@ -48,18 +48,20 @@ def get_cpu_usage(request):
                                                    }}
                  }
 
-        es_result = es.search(index='metricbeat-6.2.4-2018.04.27', body=query)
+        es_result = es.search(index='metricbeat-6.2.4-2018.04.28', body=query)
 
         if es_result['hits']['total'] != 0:
             for h in es_result['hits']['hits']:
                 data = []
                 timestamp = h['_source']['@timestamp']
                 cpu_pct = h['_source']['system']['process']['cpu']['total']['pct']
-                data.append(int(timestamp))
+                print(type(timestamp))
+                print(repr(timestamp))
+                data.append(timestamp)
                 data.append(cpu_pct)
                 response_list.append(data)
 
-    return HttpResponse(json.dumps(response_list, default=utils.json_date_handler))
+    return HttpResponse(json.dumps(response_list))
 
 
 # 定时任务
