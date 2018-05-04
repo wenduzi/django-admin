@@ -4,7 +4,6 @@ from django.views.decorators.csrf import csrf_exempt
 from hosts import task, utils, models
 from elasticsearch import Elasticsearch
 import json
-import pytz
 from pytz import timezone
 from datetime import datetime, timedelta
 
@@ -40,7 +39,7 @@ def get_cpu_usage(request):
             host_id = host_id
             host = models.BindHostToUser.objects.get(id=host_id)
         es = Elasticsearch(['11.11.66.148:9200'], timeout=120)
-        end_t = timezone('utc').localize(datetime.now()).astimezone(pytz.timezone('Asia/Shanghai'))
+        end_t = datetime.now(timezone('Asia/Shanghai'))
         start_t = end_t - timedelta(minutes=10)
         query = {"size": 10000, "query": {"bool": {"filter": [{"match": {"beat.hostname": host.host.hostname}},
                                                               {"exists": {"field": "system.process.cpu.total.pct"}},
@@ -48,19 +47,32 @@ def get_cpu_usage(request):
                                                    }}
                  }
 
-        es_result = es.search(index='metricbeat-6.2.4-2018.04.28', body=query)
+        es_result = es.search(index='metricbeat-6.2.4-2018.05.04', body=query)
 
         if es_result['hits']['total'] != 0:
             for h in es_result['hits']['hits']:
                 data = []
-                timestamp = h['_source']['@timestamp']
+                timestamp = h['_source']['@timestamp'].replace('T', ' ').replace('Z', '').split(".")[0]
                 cpu_pct = h['_source']['system']['process']['cpu']['total']['pct']
-                print(type(timestamp))
-                print(repr(timestamp))
                 data.append(timestamp)
                 data.append(cpu_pct)
                 response_list.append(data)
 
+        # remove repeated metrics
+        start = response_list[-1]
+        print(start[0])
+        for i in range(len(response_list)-2, -1, -1):     # range(start, end, step)
+            if response_list[i][0] == start[0]:
+                if response_list[i][1] <= start[1]:
+                    response_list.remove(response_list[i])
+                else:
+                    response_list.remove(start)
+                    start = response_list[i]
+            else:
+                start = response_list[i]
+
+        # sort by time
+        response_list = sorted(response_list, key=lambda response_list: response_list[0])
     return HttpResponse(json.dumps(response_list))
 
 

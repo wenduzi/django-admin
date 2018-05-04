@@ -56,38 +56,39 @@
             App.init();
         });
 
-        var cpu = [];
-
-        var timestamp =(new Date()).valueOf();
         var blue="#348fe2",blueLight="#5da5e8",blueDark="#1993E4",aqua="#49b6d6",aquaLight="#6dc5de",aquaDark="#3a92ab",green="#00acac",greenLight="#33bdbd",greenDark="#008a8a",orange="#f59c1a",orangeLight="#f7b048",orangeDark="#c47d15",dark="#2d353c",grey="#b6c2c9",purple="#727cb6",purpleLight="#8e96c5",purpleDark="#5b6392",red="#ff5b57";
-        var handleInteractiveChart=function(){"use strict";
+
+        function handleInteractiveChart(date) {
+            "use strict";
             function e(e,t,n){
-                $('<div id="tooltip" class="flot-tooltip">'+n+"</div>").css({top:t-45,left:e-55}).appendTo("body").fadeIn(200)
-                }
+                $('<div id="tooltip" class="flot-tooltip">'+n+"</div>").css({top:t-45,left:e-55}).appendTo("body").fadeIn(200)}
                 if($("#cpu_pct_chart").length!==0){
-                        var t=cpu;
-                        var n=[[timestamp,5],[timestamp+1000,7],[timestamp+1000,11]];
+                        var t=date;
+                        var n=[];
                         $.plot(
                             $("#cpu_pct_chart"),
                             [{data:t,label:"cpu_total_pct",color:purple,lines:{show:true,fill:false,lineWidth:1},points:{show:false,radius:1,fillColor:"#fff"},shadowSize:0},{data:n,label:"Visitors",color:green,lines:{show:true,fill:false,lineWidth:1,fillColor:""},points:{show:false,radius:3,fillColor:"#fff"},shadowSize:0}],
-                            {xaxis:{mode: "time",tickColor:"#ddd",tickSize:2},yaxis:{tickColor:"#ddd",tickSize:20},grid:{hoverable:true,clickable:true,tickColor:"#ccc",borderWidth:1,borderColor:"#ddd"},legend:{labelBoxBorderColor:"#ddd",margin:0,noColumns:1,show:true}});
+                            {xaxis:{mode: "time",tickColor:"#ddd"},yaxis:{tickColor:"#ddd"},grid:{hoverable:true,clickable:true,tickColor:"#ccc",borderWidth:1,borderColor:"#ddd"},legend:{labelBoxBorderColor:"#ddd",margin:0,noColumns:1,show:true}});
                         var r=null;
-                        $("#cpu_pct_chart").bind("plothover",function(t,n,i){$("#x").text(n.x.toFixed(2));$("#y").text(n.y.toFixed(2));if(i){if(r!==i.dataIndex){r=i.dataIndex;$("#tooltip").remove();var s=i.datapoint[1].toFixed(2);var o=i.series.label+" "+s;e(i.pageX,i.pageY,o)}}else{$("#tooltip").remove();r=null}t.preventDefault()})}};
+                        $("#cpu_pct_chart").bind("plothover",function(t,n,i){$("#x").text(n.x.toFixed(2));$("#y").text(n.y.toFixed(2));if(i){if(r!==i.dataIndex){r=i.dataIndex;$("#tooltip").remove();var s=i.datapoint[1].toFixed(2);var o=i.series.label+" "+s;e(i.pageX,i.pageY,o)}}else{$("#tooltip").remove();r=null}t.preventDefault()})}
+        }
+
         function getCpuUsage() {
             var selected_host=VerifyHostSelection();
             if (selected_host.length !== 0){
                 $.getJSON('{% url 'get_cpu_usage' %}', {selected_host:selected_host}, function(callback){
                     console.log(callback);
-                    cpu = callback;
-                    console.log(cpu[0][0]);
-                    console.log(typeof cpu[0][0]);
-                    handleInteractiveChart();
+                    for (var i=0;i<callback.length;i++){
+                        callback[i][0]=Date.parse(new Date(callback[i][0]));
+
+                    }
+                    var timestamp = Date.parse( new Date());
+                    console.log(timestamp);
+                    handleInteractiveChart(callback);
                 });
             }
-            setTimeout('getCpuUsage()', 4000);
+            setTimeout('getCpuUsage()', 10000);
         }
-
-        getCpuUsage();
 
         function VerifyHostSelection() {
             var selected_host=[];
@@ -100,6 +101,7 @@
             return(selected_host)
         }
 
+        getCpuUsage();
         {% include 'host_list_js.html' %}
     </script>
 
